@@ -33,7 +33,7 @@ public class GiliNewServlet extends HttpServlet {
     
     int base = 20;
     int exp = 13;
-    long powerResult = (int)Math.pow(base,exp);
+    long powerResult = (long) Math.pow(base,exp);
     String line3 = new String("calculation 3: Power of 20 with exp of 13 is: " +powerResult );
     resp.getWriter().println(line3) ;
 	}
