@@ -10,8 +10,12 @@ public class Stock {
 	private float bid;
 	private Date date ;
 	private String stockDetails; 
-	
-	
+	private int recommendation;
+	private int stockQuantity;
+	final static private int BUY = 0;
+	final static private int SELL = 1;
+	final static private int REMOVE = 2;
+	final static private int HOLD = 3;
 	
 	
 	public Stock(String symbol, float ask, float bid, Date date){
@@ -50,6 +54,21 @@ public class Stock {
 	public Date getDate (){
 	return this.date;
 	}
+	
+	public void setRecommendation(int recomend){
+		this.recommendation = recomend;
+	}
+	public int getRecommendation(){
+		return this.recommendation;
+	}
+	
+	public void setStockQuantity(int quantity){
+		this.stockQuantity = quantity;
+	}
+	public int getStockQuantity(){
+		return this.stockQuantity;
+	}
+	
 	
 	public String getHtmlDescription(){
 		
