@@ -1,8 +1,14 @@
-package com.mta.javacourse;
+package com.mta.javacourse.model;
 import java.util.Date; 
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+
+/**
+ * Represent a stock
+ * @author Gili
+ *
+ */
 
 public class Stock {
 	private String symbol ;
@@ -17,14 +23,33 @@ public class Stock {
 	final static private int REMOVE = 2;
 	final static private int HOLD = 3;
 	
+
+	public Stock() {
+		this.symbol = null;
+		this.ask = 0;
+		this.bid = 0;
+		this.date = null;
+		this.stockDetails = null;
+		this.recommendation = 0;
+		this.stockQuantity = 0;
+	}
 	
 	public Stock(String symbol, float ask, float bid, Date date){
 		this.symbol = symbol;
 		this.ask = ask;
 		this.bid = bid;
 		this.date = date;
+		this.recommendation = 0;
+		this.stockQuantity = 0;
 	}
 	
+	public Stock(Stock stock1){
+		this(new String (stock1.getSymbol()),stock1.getAsk(),stock1.getBid(), new Date(stock1.getDate().getTime()));
+		this.recommendation = stock1.getRecommendation();
+		this.stockQuantity = stock1.getStockQuantity();
+	}
+	
+
 	//Getters&Setters//
 	public void setSymbol (String symbol1){
 		this.symbol = symbol1;
@@ -69,16 +94,20 @@ public class Stock {
 		return this.stockQuantity;
 	}
 	
+	///Methods
 	
+	
+	/**
+	 * Method that create a string with stock's details
+	 * @return a string with stock's details
+	 */
 	public String getHtmlDescription(){
 		
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		String dateStr = df.format(getDate());
 	
-		this.stockDetails = "<b>Stock symbol </b>: "+getSymbol()+" <b>Stock ask </b>: "+getAsk()+" <b>Stock bid </b>: "+getBid()+ " <b>Stock date </b>:" +dateStr +"<br>";
+		this.stockDetails = "<b>Stock symbol </b>: "+getSymbol()+" <b>Stock ask </b>: "+getAsk()+" <b>Stock bid </b>: "+getBid()+ " <b>Stock date </b>:" +dateStr;
 		return this.stockDetails;
-	}
-	
-	
+	}	
 }
 

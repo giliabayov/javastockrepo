@@ -4,35 +4,7 @@ xmlns="http://java.sun.com/xml/ns/javaee"
 xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
-	<servlet>
-		<servlet-name>Gili_MTA</servlet-name>
-		<servlet-class>com.mta.javacourse.Gili_MTAServlet</servlet-class>
-	</servlet>
 	
-	<servlet-mapping>
-		<servlet-name>Gili_MTA</servlet-name>
-		<url-pattern>/gili_mta</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-	<servlet-name>GiliNewServlet</servlet-name>
-	<servlet-class>com.mta.javacourse.GiliNewServlet</servlet-class>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>GiliNewServlet</servlet-name>
-		<url-pattern>/gilinewservlet</url-pattern>
-	</servlet-mapping>
-	
-	<servlet>
-	<servlet-name>StockDetailsServlet</servlet-name>
-	<servlet-class>com.mta.javacourse.StockDetailsServlet</servlet-class>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>StockDetailsServlet</servlet-name>
-		<url-pattern>/stockdetails</url-pattern>
-	</servlet-mapping>
 	
 	<servlet>
 	<servlet-name>PortfolioServlet</servlet-name>
