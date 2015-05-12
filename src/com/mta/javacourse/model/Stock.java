@@ -1,8 +1,9 @@
 package com.mta.javacourse.model;
 import java.util.Date; 
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+
+import com.mta.javacourse.model.Portfolio.ALGO_RECOMMENDATION;
 
 /**
  * Represent a stock
@@ -16,12 +17,8 @@ public class Stock {
 	private float bid;
 	private Date date ;
 	private String stockDetails; 
-	private int recommendation;
+	private ALGO_RECOMMENDATION recommendation;
 	private int stockQuantity;
-	final static private int BUY = 0;
-	final static private int SELL = 1;
-	final static private int REMOVE = 2;
-	final static private int HOLD = 3;
 	
 
 	public Stock() {
@@ -30,7 +27,7 @@ public class Stock {
 		this.bid = 0;
 		this.date = null;
 		this.stockDetails = null;
-		this.recommendation = 0;
+		this.recommendation = null;
 		this.stockQuantity = 0;
 	}
 	
@@ -39,7 +36,7 @@ public class Stock {
 		this.ask = ask;
 		this.bid = bid;
 		this.date = date;
-		this.recommendation = 0;
+		this.recommendation = null;
 		this.stockQuantity = 0;
 	}
 	
@@ -80,10 +77,10 @@ public class Stock {
 	return this.date;
 	}
 	
-	public void setRecommendation(int recomend){
+	public void setRecommendation(ALGO_RECOMMENDATION recomend){
 		this.recommendation = recomend;
 	}
-	public int getRecommendation(){
+	public ALGO_RECOMMENDATION getRecommendation(){
 		return this.recommendation;
 	}
 	
@@ -93,6 +90,8 @@ public class Stock {
 	public int getStockQuantity(){
 		return this.stockQuantity;
 	}
+	
+	
 	
 	///Methods
 	
@@ -109,5 +108,9 @@ public class Stock {
 		this.stockDetails = "<b>Stock symbol </b>: "+getSymbol()+" <b>Stock ask </b>: "+getAsk()+" <b>Stock bid </b>: "+getBid()+ " <b>Stock date </b>:" +dateStr;
 		return this.stockDetails;
 	}	
+	
+		
 }
+	
+	
 
