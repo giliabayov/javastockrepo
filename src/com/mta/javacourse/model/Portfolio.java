@@ -110,6 +110,7 @@ public class Portfolio implements PortfolioInterface {
 	 * Method that add a new stock to the stock's array
 	 * @param newStock is the stock we want to add
 	 */
+
 	public void addStock(Stock newStock){
 		boolean flag = true;
 		if(newStock != null && this.portfolioSize < MAX_PORTFOLIO_SIZE){
@@ -135,7 +136,8 @@ public class Portfolio implements PortfolioInterface {
 		System.out.println("the stock was add successfuly-  2 - ");
 	}
 
-
+	
+	
 	/**
 	 * Method that create a string with the portfolio details
 	 * @return  a string with the portfolio details
@@ -277,6 +279,8 @@ public class Portfolio implements PortfolioInterface {
 	 * @param quantity - Number of stocks to buy
 	 * @return indicating operation success/fail
 	 */
+
+
 	public boolean buyStock(Stock stock, int quantity){
 
 		boolean res = false;
@@ -298,6 +302,7 @@ public class Portfolio implements PortfolioInterface {
 						((Stock)this.stocks[i]).setStockQuantity(((Stock)this.stocks[i]).getStockQuantity() + quantityToBuy);
 						res = true;
 						return res;
+						
 					}
 				}
 				else{
@@ -308,8 +313,8 @@ public class Portfolio implements PortfolioInterface {
 						return res;
 					}
 					else{
-						this.updateBalance(-(price));						
-						((Stock)this.stocks[i]).setStockQuantity((((Stock)this.stocks[i]).getStockQuantity() + quantityToBuy));
+						this.updateBalance(-(price));		
+						((Stock)this.stocks[i]).setStockQuantity(((Stock)this.stocks[i]).getStockQuantity() + quantityToBuy);		
 						return res = true;
 					}
 				}
@@ -333,7 +338,7 @@ public class Portfolio implements PortfolioInterface {
 					this.addStock(stock);
 					stock.setStockQuantity((stock.getStockQuantity() + quantityToBuy));
 					res = true;
-					return res;
+										return res;
 				}
 			}
 			else{
@@ -346,7 +351,7 @@ public class Portfolio implements PortfolioInterface {
 				else{
 					this.updateBalance(-(price));					
 					this.addStock(stock);
-					stock.setStockQuantity(stock.getStockQuantity() + quantityToBuy);
+					stock.setStockQuantity(stock.getStockQuantity() + quantityToBuy);	
 					res = true;
 					return res;
 				}
@@ -354,6 +359,7 @@ public class Portfolio implements PortfolioInterface {
 		}
 		return false;
 	}
+	
 
 	/**
 	 * Method that check if a specific stock exist in the array
@@ -361,12 +367,14 @@ public class Portfolio implements PortfolioInterface {
 	 * @return stockInterface
 	 */
 
-	public StockInterface findStock(String symbol) {
-		for(int i = 0; i< this.portfolioSize ; i++){
-			if (this.stocks[i].equals(symbol));
-			return this.stocks[i];
-		}
 
+	public StockInterface findStock(String symbol) {
+		
+		for (int i = 0; i < getPortfolioSize(); i++) {
+			if (getStocks()[i].getSymbol().equals(symbol)){
+				return this.getStocks()[i];
+			}
+		}
 		return null;
 	}
 

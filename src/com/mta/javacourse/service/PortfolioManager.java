@@ -33,7 +33,6 @@ import org.algo.service.*;
  * Class code to demonstrate new PortfolioManager
  */
 
-@SuppressWarnings("unused")
 public class PortfolioManager implements PortfolioManagerInterface {
 
 	public enum ALGO_RECOMMENDATION {BUY, SELL, REMOVE, HOLD }
@@ -52,7 +51,7 @@ public class PortfolioManager implements PortfolioManagerInterface {
 	@Override
 	public void update() {
 		StockInterface[] stocks = getPortfolio().getStocks();
-		List<String> symbols = new ArrayList<String>(Portfolio.getMaxSize());
+		List<String> symbols = new ArrayList<>(Portfolio.getMaxSize());
 		for (StockInterface si : stocks) {
 			symbols.add(si.getSymbol());
 		}
@@ -144,7 +143,7 @@ public class PortfolioManager implements PortfolioManagerInterface {
 			Stock stock = fromDto(stockDto);
 
 			//first thing, add it to portfolio.
-
+			
 			portfolio.addStock(stock);   
 
 			//second thing, save the new stock to the database.
@@ -244,8 +243,7 @@ public class PortfolioManager implements PortfolioManagerInterface {
 		Portfolio ret;
 		if(stocks == null) {
 			ret = new Portfolio();			
-		}
-		else {
+		}else {
 			List<Stock> stockList = new ArrayList<Stock>();
 			for (StockDto stockDto : stocks) {
 				stockList.add(fromDto(stockDto));
@@ -331,5 +329,3 @@ public class PortfolioManager implements PortfolioManagerInterface {
 
 
 }
-
-
