@@ -1,27 +1,42 @@
 package com.mta.javacourse.model;
+import org.algo.dto.PortfolioTotalStatus;
+import org.algo.exception.PortfolioException;
+import org.algo.model.*;
+
 /**
  * Represent a portfolio of stocks
  * @author Gili
  *
  */
 
+public class Portfolio implements PortfolioInterface {
 
-public class Portfolio {
+	final static private int MAX_PORTFOLIO_SIZE = 5;
+	final static private int ALL = -1;
+
 	public enum ALGO_RECOMMENDATION{
 		BUY, SELL, REMOVE, HOLD; 
 	}
-	final static private int MAX_PORTFOLIO_SIZE = 5;
-	final static private int ALL = -1;
+
 	private String title;
-	private Stock[] stocks;
+	private StockInterface[] stocks;
 	private int portfolioSize;
 	private float balance = 0;
 
-/**
- *  The class constractor
- * @param portName -the protfolio title
- */
-	
+	/**
+	 * The class c'tor
+	 */
+
+	public Portfolio() {
+		this.title = null;
+		this.stocks = new Stock[MAX_PORTFOLIO_SIZE];
+		this.portfolioSize = 0; 
+		this.balance = 0 ;
+	}
+	/**
+	 *  The class constructor with string
+	 * @param portName -the portfolio title
+	 */
 	public Portfolio(String portName) {
 		this.title = portName;
 		this.stocks = new Stock[MAX_PORTFOLIO_SIZE];
@@ -29,17 +44,32 @@ public class Portfolio {
 		this.balance = 0 ;
 	}
 
-/**
- *  The copy constractor
- * @param port-the original portfolio
- */
-	
+	/**
+	 * Copy constructor by stock array
+	 * @param stockArray - the array we want to copy
+	 */
+
+	public Portfolio(StockInterface[] stockArray) {
+		this.title = new String("temp title");
+		this.portfolioSize = stockArray.length;
+		this.balance = 0;
+		this.stocks = new StockInterface[MAX_PORTFOLIO_SIZE];
+		for(int i = 0; i<this.portfolioSize; i++){
+			this.stocks[i]= new Stock ((Stock)stockArray[i]);
+		}
+	}
+
+	/**
+	 *  Copy constructor by portfolio
+	 * @param port-the original portfolio
+	 */
+
 	public Portfolio(Portfolio port) {
 		this(port.getTitle());
 		this.portfolioSize = port.getPortfolioSize(); 
 
 		for(int i =0; i < port.portfolioSize ; i++){
-			this.stocks[i] = new Stock(port.getStocks()[i]);
+			this.stocks[i] = new Stock((Stock)port.getStocks()[i]);
 		}	
 	}
 
@@ -56,7 +86,7 @@ public class Portfolio {
 	public void setStock(Stock[] newStock){
 		this.stocks = newStock;
 	}
-	public Stock[] getStocks(){
+	public StockInterface[] getStocks(){
 		return this.stocks;
 	}
 
@@ -71,6 +101,10 @@ public class Portfolio {
 		return this.balance;
 	}
 
+	public static int getMaxSize() {
+
+		return MAX_PORTFOLIO_SIZE;
+	}
 
 	/**
 	 * Method that add a new stock to the stock's array
@@ -87,8 +121,9 @@ public class Portfolio {
 			}
 			if (flag){
 				this.stocks[portfolioSize] = newStock ; 
-				this.stocks[portfolioSize].setStockQuantity(0);
+				((Stock)this.stocks[portfolioSize]).setStockQuantity(0);
 				this.portfolioSize++;
+				System.out.println("the stock was add successfuly");
 			}
 		}
 		else if(this.portfolioSize >= MAX_PORTFOLIO_SIZE){
@@ -97,6 +132,7 @@ public class Portfolio {
 		else{
 			System.out.println("the stock is null");
 		}
+		System.out.println("the stock was add successfuly-  2 - ");
 	}
 
 
@@ -107,7 +143,7 @@ public class Portfolio {
 	public String getHtmlString(){
 		String resStr = new String("<h1>" + this.getTitle() + "</h1>");
 		for (int i = 0; i < this.portfolioSize; i++){
-			Stock tempS = this.stocks[i];
+			Stock tempS = ((Stock)this.stocks[i]);
 			resStr+= tempS.getHtmlDescription() + "<br>";
 		}
 		resStr += "Total Portfolio Value: "+this.getTotalValue() +"$ "+ " Total Stock Value: " + this.getStocksValue()+"$ "+ " Balance: "+ this.getBalance()+"$";
@@ -149,6 +185,7 @@ public class Portfolio {
 		}
 		return result;
 	}
+
 	/**
 	 * A method that sell stock
 	 * @param symbolToSell - the stock symbol you want sell
@@ -169,26 +206,27 @@ public class Portfolio {
 			for(int i = 0; i < this.portfolioSize ; i++ ){
 				if(symbolToSell.equals(this.stocks[i].getSymbol())){
 
-					if(quantity > this.stocks[i].getStockQuantity()){
+					if(quantity > ((Stock)this.stocks[i]).getStockQuantity()){
 						System.out.println("Not enough stocks to sell");
 						return result = false;
 					}
 					else if(quantity == ALL){
-						newBalance = (this.stocks[i].getBid() * this.stocks[i].getStockQuantity());
-						this.stocks[i].setStockQuantity(0);					
+						newBalance = (this.stocks[i].getBid() * ((Stock)this.stocks[i]).getStockQuantity());
+						((Stock)this.stocks[i]).setStockQuantity(0);					
 						this.updateBalance(newBalance);
 					}
 					else{
 						newBalance = this.stocks[i].getBid()*quantity;
 						this.updateBalance(newBalance);
-						newQuantity = (this.stocks[i].getStockQuantity() - quantity);
-						this.stocks[i].setStockQuantity(newQuantity);	
+						newQuantity = (((Stock)this.stocks[i]).getStockQuantity() - quantity);
+						((Stock)this.stocks[i]).setStockQuantity(newQuantity);	
 					}
 				}
 			}
 		}
 		return result;
 	}
+
 
 	/**
 	 * Method that update portfolio balance
@@ -199,13 +237,14 @@ public class Portfolio {
 		float sum = this.getBalance();
 		sum += amount;
 
-		if (sum > 0){
+		if (sum >= 0){
 			this.balance += amount;
 		}
 		else{
 			System.out.println("the balance is negative- enter new amount");
 		}
 	}
+
 
 	/**
 	 * Method that calculate the value of stocks in the portfolio
@@ -214,10 +253,11 @@ public class Portfolio {
 	public float getStocksValue(){
 		float totalValue = 0;
 		for (int i = 0 ; i< this.portfolioSize; i++){
-			totalValue += this.stocks[i].getBid() * this.stocks[i].getStockQuantity() ;
+			totalValue += this.stocks[i].getBid() * ((Stock)this.stocks[i]).getStockQuantity() ;
 		}
 		return totalValue;	
 	}
+
 
 	/**
 	 *  Sum the all stocks value and portfolio’s balance
@@ -229,6 +269,7 @@ public class Portfolio {
 		res = this.getStocksValue() + this.getBalance();
 		return res;
 	}
+
 
 	/**
 	 * Buy a new stock or quantity from an existing stock and add's it to the portfolio
@@ -254,7 +295,7 @@ public class Portfolio {
 					else{
 						price += (price * quantityToBuy);
 						this.updateBalance(-(price));
-						this.stocks[i].setStockQuantity(this.stocks[i].getStockQuantity() + quantityToBuy);
+						((Stock)this.stocks[i]).setStockQuantity(((Stock)this.stocks[i]).getStockQuantity() + quantityToBuy);
 						res = true;
 						return res;
 					}
@@ -268,7 +309,7 @@ public class Portfolio {
 					}
 					else{
 						this.updateBalance(-(price));						
-						this.stocks[i].setStockQuantity((this.stocks[i].getStockQuantity() + quantityToBuy));
+						((Stock)this.stocks[i]).setStockQuantity((((Stock)this.stocks[i]).getStockQuantity() + quantityToBuy));
 						return res = true;
 					}
 				}
@@ -314,7 +355,23 @@ public class Portfolio {
 		return false;
 	}
 
+	/**
+	 * Method that check if a specific stock exist in the array
+	 * @param symbol- the stock's name
+	 * @return stockInterface
+	 */
+
+	public StockInterface findStock(String symbol) {
+		for(int i = 0; i< this.portfolioSize ; i++){
+			if (this.stocks[i].equals(symbol));
+			return this.stocks[i];
+		}
+
+		return null;
+	}
+
 }
+
 
 
 
