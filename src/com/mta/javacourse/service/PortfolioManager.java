@@ -21,6 +21,9 @@ import org.algo.service.ServiceManager;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.mta.javacourse.exception.BalanceException;
+import com.mta.javacourse.exception.PortfolioFullException;
+import com.mta.javacourse.exception.StockAlreadyExistsException;
 import com.mta.javacourse.model.Portfolio;
 import com.mta.javacourse.model.Stock;
 
@@ -133,7 +136,7 @@ public class PortfolioManager implements PortfolioManagerInterface {
 	 * Add stock to portfolio 
 	 */
 	@Override
-	public void addStock(String symbol) {
+	public void addStock(String symbol) throws PortfolioException {
 		Portfolio portfolio = (Portfolio) getPortfolio();
 
 		try {
@@ -144,14 +147,32 @@ public class PortfolioManager implements PortfolioManagerInterface {
 
 			//first thing, add it to portfolio.
 			
-			portfolio.addStock(stock);   
+			try {
+				portfolio.addStock(stock);
+				} catch (StockAlreadyExistsException e) {
+				System.out.println(e.getMessage()+ "im here");
+				e.printStackTrace();
+				throw e;
+			} catch (PortfolioFullException e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+				throw e;
+			} catch (ExceptionInInitializerError e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+				throw e;
+			}   
 
 			//second thing, save the new stock to the database.
-			datastoreService.saveStock(toDto(portfolio.findStock(symbol)));
+		
+				datastoreService.saveStock(toDto(portfolio.findStock(symbol)));
+	
 
 			flush(portfolio);
 		} catch (SymbolNotFoundInNasdaq e) {
-			System.out.println("Stock Not Exists: "+symbol);
+			//System.out.println("Stock Not Exists: "+symbol);
+			e.getMessage();
+			e.printStackTrace();
 		}
 	}
 
@@ -304,7 +325,17 @@ public class PortfolioManager implements PortfolioManagerInterface {
 	@Override
 	public void sellStock(String symbol, int quantity) throws PortfolioException {
 		Portfolio portfolio = (Portfolio) getPortfolio();
-		portfolio.sellStock(symbol, quantity);
+		try {
+			portfolio.sellStock(symbol, quantity);
+		} catch (ExceptionInInitializerError e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			e.getMessage();
+			e.printStackTrace();
+			
+		}
 		flush(portfolio);
 	}
 
@@ -312,18 +343,34 @@ public class PortfolioManager implements PortfolioManagerInterface {
 	 * Remove stock
 	 */
 	@Override
-	public void removeStock(String symbol) { 
+	public void removeStock(String symbol) throws PortfolioException{ 
 		Portfolio portfolio = (Portfolio) getPortfolio();
-		portfolio.removeStock(symbol);
+		
+		try {
+			portfolio.removeStock(symbol);
+		} catch (ExceptionInInitializerError e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
 		flush(portfolio);
 	}
 
 	/**
 	 * update portfolio balance
 	 */
-	public void updateBalance(float value) { 
+	public void updateBalance (float value)throws PortfolioException { 
 		Portfolio portfolio = (Portfolio) getPortfolio();
-		portfolio.updateBalance(value);
+		try {
+			portfolio.updateBalance(value);
+		} catch (BalanceException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			throw e;
+		}
 		flush(portfolio);
 	}
 
